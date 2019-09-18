@@ -31,14 +31,14 @@ export class AppComponent {
     return a + b;
   }
 
-  addNaLista(  age, eyeColor, name, gender, company) {
-      this.pessoas.push({
-        age,
-        eyeColor,
-        name,
-        gender,
-        company,
-      });
-    }
+  // addNaLista(  age, eyeColor, name, gender, company) {
+  //     this.pessoas.push({
+  //       age,
+  //       eyeColor,
+  //       name,
+  //       gender,
+  //       company,
+  //     });
+  //   }
 
 }
