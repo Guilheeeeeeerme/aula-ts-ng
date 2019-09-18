@@ -1,0 +1,11 @@
+<ul class="list-group">
+  <li 
+    (click)="mostraDetalhes(p)"
+    class="list-group-item" 
+    *ngFor="let p of pessoas">
+    {{ p.name }}
+  </li>
+</ul>
+
+{{ pessoaSelecionada | json }}
+<!-- {{ pessoa | json }} -->
