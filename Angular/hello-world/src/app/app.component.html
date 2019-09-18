@@ -1,11 +1,22 @@
-<ul class="list-group">
-  <li 
-    (click)="mostraDetalhes(p)"
-    class="list-group-item" 
-    *ngFor="let p of pessoas">
-    {{ p.name }}
-  </li>
-</ul>
+<div class="container">
 
-{{ pessoaSelecionada | json }}
-<!-- {{ pessoa | json }} -->
+  <div class="row">
+    
+    <h3>
+      Variáveis no component:
+    </h3>
+
+    <!-- TIPO SIMPLES -->
+    <p>Um Numero: {{ umNumero }}</p>
+    <p>Um Texto: {{ umTexto }}</p>
+    <p>Um Boolean: {{ umBoolean }}</p>
+
+    <!-- TIPO COMPLEXO -->
+    <p>Um Objeto: {{ umObjeto | json }}</p>
+    <p>Uma Lista: {{ umaLista | json }}</p>
+
+    <!-- Metodos -->
+    <p>Um Método: {{ soma(1, 2) }}</p>
+
+  </div>
+</div>
