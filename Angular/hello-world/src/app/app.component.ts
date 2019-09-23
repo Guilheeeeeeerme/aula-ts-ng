@@ -22,7 +22,7 @@ export class AppComponent {
   pessoas = Pessoas;
 
 
-  pessoaSelecionada = {};
+  pessoaSelecionada = null;
   mostraDetalhes(p) {
     this.pessoaSelecionada = p;
   }
