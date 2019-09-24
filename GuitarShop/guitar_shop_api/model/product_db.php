@@ -12,6 +12,17 @@ function get_products_by_category($category_id) {
     return $products;
 }
 
+function get_products() {
+    global $db;
+    $query = 'SELECT * FROM products
+              ORDER BY productID';
+    $statement = $db->prepare($query);
+    $statement->execute();
+    $products = $statement->fetchAll();
+    $statement->closeCursor();
+    return $products;
+}
+
 function get_product($product_id) {
     global $db;
     $query = 'SELECT * FROM products
@@ -46,6 +57,9 @@ function add_product($category_id, $code, $name, $price) {
     $statement->bindValue(':name', $name);
     $statement->bindValue(':price', $price);
     $statement->execute();
+    $id = $db->lastInsertId();
     $statement->closeCursor();
+
+    return get_product($id);
 }
 ?>
