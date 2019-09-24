@@ -60,5 +60,6 @@ run-api: stop-api
 		-p 8080:80 \
 		guitar_shop_api/base:$(IMG_VERSION)
 
-build: run-database run-api
+stop: stop-database stop-api
+run: run-database run-api
 build: create-network build-database build-api
