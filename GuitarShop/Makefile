@@ -50,14 +50,14 @@ run-api-it: stop-api
 	docker run -it \
 		--network guitar_shop \
 		--name guitar_shop_api \
-		-p 8080:80 \
+		-p 8081:80 \
 		guitar_shop_api/base:$(IMG_VERSION)
 
 run-api: stop-api
 	docker run -d \
 		--network guitar_shop \
 		--name guitar_shop_api \
-		-p 8080:80 \
+		-p 8081:80 \
 		guitar_shop_api/base:$(IMG_VERSION)
 
 stop: stop-database stop-api
