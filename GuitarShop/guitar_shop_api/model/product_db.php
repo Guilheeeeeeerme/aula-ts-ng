@@ -57,9 +57,9 @@ function add_product($category_id, $code, $name, $price) {
     $statement->bindValue(':name', $name);
     $statement->bindValue(':price', $price);
     $statement->execute();
-    $id = $db->lastInsertId();
     $statement->closeCursor();
 
+    $id = $db->lastInsertId();
     return get_product($id);
 }
 ?>

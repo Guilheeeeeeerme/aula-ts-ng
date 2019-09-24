@@ -46,7 +46,12 @@ export class AppComponent {
       console.log({ error });
     });
 
-    this.produtosApiService.PostProduto(1, '2', '3', 4).then((produto) => {
+    this.produtosApiService.PostProduto(
+      Math.round(Math.random() * 3),
+      `Produto ${Math.round(Math.random() * 1000)}`,
+      `Code ${Math.round(Math.random() * 1000)}`,
+      Math.round(Math.random() * 1000)
+      ).then((produto) => {
       // produto do id 'x' vem na variavel 'produto'
       console.log({ PostProduto: produto });
     }).catch((error) => {

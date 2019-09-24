@@ -9,22 +9,20 @@ header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
 header('Access-Control-Max-Age: 1000');
 header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization');
 
-$category_id = filter_input(INPUT_POST, 'categoryID', FILTER_VALIDATE_INT);
-$code = filter_input(INPUT_POST, 'productCode');
-$name = filter_input(INPUT_POST, 'productName');
-$price = filter_input(INPUT_POST, 'listPrice', FILTER_VALIDATE_FLOAT);
-
 // checando se foi post
-if ($code != NULL) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    echo '$category_id '. $category_id;
-    echo '$code '. $code;
-    echo '$name '. $name;
-    echo '$price '. $price;
+    $json = file_get_contents('php://input');
+    $array = json_decode($json, true);
 
-    // echo json_encode(
-    //     add_product($category_id, $code, $name, $price)
-    // );
+    $category_id = $array['categoryID'];
+    $code = $array['productCode'];
+    $name = $array['productName'];
+    $price = $array['listPrice'];
+
+    echo json_encode(
+        add_product($category_id, $code, $name, $price)
+    );
 
 } else {
 
