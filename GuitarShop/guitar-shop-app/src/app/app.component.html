@@ -1,116 +1,138 @@
-
 <div class="container-fluid">
-  <div class="row">
-
-    <div class="col-md-4">
-
-      <h3>Categorias:</h3>
-      <ul class='list-group'>
-        <li 
-          class="list-group-item"
-          (click)="clicaCategoria(categoria)"
-          *ngFor="let categoria of minhasCategorias" >
+    <div class="row">
+  
+      <div class="col-md-3">
+  
+        <h3>Categorias:</h3>
+        <ul class='list-group'>
+          <li class="list-group-item" (click)="clicaCategoria(categoria)" *ngFor="let categoria of minhasCategorias">
             {{ categoria.categoryName }}
-        </li>
-      </ul>
-
-      <h3>Produtos:</h3>
-      <h4>
-        Filtro vem aqui
-      </h4>
-      <ul class='list-group'>
-          <li 
-            class="list-group-item"
-            (click)="clicaProduto(produto)"
-            *ngFor="let produto of meusProdutos" >
-              {{ produto.productName }}
           </li>
         </ul>
-
+  
       </div>
-    
-    <div class="col-md-4">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Product ID</th>
-            <th>Category ID</th>
-            <th>Product Code</th>
-            <th>Product Name</th>
-            <th>List Price</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngIf="detalhesProduto">            
-            <td>{{ detalhesProduto.productID }}</td>
-            <td>{{ detalhesProduto.categoryID }}</td>
-            <td>{{ detalhesProduto.productCode }}</td>
-            <td>{{ detalhesProduto.productName }}</td>
-            <td>{{ detalhesProduto.listPrice }}</td>
-          </tr>
-        </tbody>
-      </table>
-
-    </div>
-
-    <div class="col-md-4">
-
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          Adicionar produto na categoria <strong>{{ nomeDaCategoria }}</strong>
-
+  
+      <div class="col-md-6">
+  
+        <h3>Produtos:</h3>
+  
+        <!-- Faixa de Preços -->
+        <h4>Product Catalog by Price:</h4>
+        <div class="btn-group">
+          <button class="btn btn-default" (click)="minPrice = 0; maxPrice = 299.99">até 299.99</button>
+          <button class="btn btn-default" (click)="minPrice = 300.00; maxPrice = 599.99">de 300.00 a 599.99</button>
+          <button class="btn btn-default" (click)="minPrice = 600.00; maxPrice = 999.99">de 600.00 a 999.99</button>
+          <button class="btn btn-default" (click)="minPrice = 1000; maxPrice = null">acima de 1,000.00</button>
         </div>
-        <div class="panel-body">
-
-          <div class="form-group">
-            <label for="categoryID">Category ID (preendhe automatico com a categoria selecionada) :</label>
-            <input type="number" class="form-control" disabled [(ngModel)]="categoryID" name="categoryID"
-              id="categoryID">
+  
+        <h4>Custom:</h4>
+        <div class="form-inline">
+            <div class="form-group">
+              <label for="minPrice">Min: </label>
+              <input type="number" class="form-control" [max]='maxPrice' [(ngModel)]="minPrice" name="minPrice" id="minPrice">
+            </div>
+      
+            <div class="form-group">
+              <label for="maxPrice">Max: </label>
+              <input type="number" class="form-control" [min]='minPrice' [(ngModel)]="maxPrice" name="maxPrice" id="maxPrice">
+            </div>
+        </div>
+  
+        <ul class='list-group'>
+          <li class="list-group-item" (click)="clicaProduto(produto)"
+            *ngFor="let produto of filtrarPreco(meusProdutos, minPrice, maxPrice)">
+            {{ produto.productName }} - {{ produto.listPrice }} R$
+          </li>
+        </ul>
+  
+      </div>
+  
+      <div class="col-md-3">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Product ID</th>
+              <th>Category ID</th>
+              <th>Product Code</th>
+              <th>Product Name</th>
+              <th>List Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="detalhesProduto">
+              <td>{{ detalhesProduto.productID }}</td>
+              <td>{{ detalhesProduto.categoryID }}</td>
+              <td>{{ detalhesProduto.productCode }}</td>
+              <td>{{ detalhesProduto.productName }}</td>
+              <td>{{ detalhesProduto.listPrice }}</td>
+            </tr>
+          </tbody>
+        </table>
+  
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            Adicionar produto na categoria <strong *ngIf="minhaCategoria">{{ minhaCategoria.categoryName }}</strong>
+  
           </div>
-
-          <div class="form-group">
-            <label for="productCode">Product Code:</label>
-            <input type="text" class="form-control" [(ngModel)]="productCode" name="productCode" id="productCode">
-          </div>
-
-          <div class="form-group">
-            <label for="productName">Product Name:</label>
-            <input type="text" class="form-control" [(ngModel)]="productName" name="productName" id="productName">
-          </div>
-
-          <div class="form-group">
-            <label for="listPrice">List Price:</label>
-            <input type="number" class="form-control" [(ngModel)]="listPrice" name="listPrice" id="listPrice">
-          </div>
-
-          <div class="form-group">
+          <div class="panel-body">
+  
+            <div class="form-group">
+              <label for="categoryID">Category ID (preendhe automatico com a categoria selecionada) :</label>
+              <input type="number" class="form-control" disabled [(ngModel)]="categoryID" name="categoryID"
+                id="categoryID">
+            </div>
+  
+            <div class="form-group">
+              <label for="productCode">Product Code:</label>
+              <input type="text" class="form-control" [(ngModel)]="productCode" name="productCode" id="productCode">
+            </div>
+  
+            <div class="form-group">
+              <label for="productName">Product Name:</label>
+              <input type="text" class="form-control" [(ngModel)]="productName" name="productName" id="productName">
+            </div>
+  
+            <div class="form-group">
+              <label for="listPrice">List Price:</label>
+              <input type="number" class="form-control" [(ngModel)]="listPrice" name="listPrice" id="listPrice">
+            </div>
+  
+            <div class="form-group">
               <!-- desabilitando os botoes se nao tiver valor -->
-            <button 
-              [disabled]='productCode == null || productName == null || listPrice == null'
-              class="btn btn-primary" 
-              (click)="adiciona()">
-              Salvar
-            </button>
+              <button [disabled]='productCode == null || productName == null || listPrice == null' class="btn btn-primary"
+                (click)="adiciona()">
+                Salvar
+              </button>
+            </div>
+  
           </div>
-
         </div>
+  
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            Adicionar categoria
+          </div>
+          <div class="panel-body">
+  
+  
+            <div class="form-group">
+              <label for="categoryName">Nome da Categoria:</label>
+              <input type="text" class="form-control" [(ngModel)]="categoryName" name="categoryName" id="categoryName">
+            </div>
+  
+            <div class="form-group">
+              <!-- desabilitando os botoes se nao tiver valor -->
+              <button [disabled]='categoryName == null' class="btn btn-primary" (click)="adicionaCategoria()">
+                Salvar
+              </button>
+            </div>
+  
+          </div>
+        </div>
+  
       </div>
-
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          Adicionar categoria <strong>{{ nomeDaCategoria }}</strong>
-
-        </div>
-        <div class="panel-body">
-          CRIAR AQUI AQUI OS CAMPOS PARA ADICIONAR <br/>
-          Observe como a tabela existe no banco <br/>
-          Compare com os campos do formulário <br/>
-        </div>
-      </div>
-
+  
     </div>
-
+  
+  
   </div>
-
-
-</div>

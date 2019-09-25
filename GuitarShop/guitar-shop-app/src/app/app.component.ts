@@ -14,6 +14,7 @@ export class AppComponent {
   public productCode: string;
   public productName: string;
   public listPrice: number;
+  public categoryName: string;
 
   // vai ter minhas categorias
   public minhasCategorias: any;
@@ -22,6 +23,10 @@ export class AppComponent {
   // vai ter meus produtos
   public meusProdutos: any;
   public detalhesProduto: any;
+
+  // Filtro de Preços
+  public minPrice = 0;
+  public maxPrice = null;
 
   constructor(
     private produtosApiService: ProdutosApiService,
@@ -61,6 +66,36 @@ export class AppComponent {
 
   }
 
+  filtrarPreco(lista, minPrice, maxPrice) {
+    const listaNova = [];
+
+    if (lista != null) {
+
+      for (const produto of lista) {
+
+        const listPrice = +produto.listPrice;
+
+        if ( maxPrice != null || minPrice != null ) {
+
+          if (maxPrice != null && listPrice <= maxPrice) {
+            listaNova.push(produto);
+          } else if (minPrice != null && listPrice >= minPrice) {
+            listaNova.push(produto);
+          } else {
+            if (listPrice >= minPrice && listPrice <= maxPrice) {
+              listaNova.push(produto);
+            }
+          }
+
+        }
+
+      }
+
+    }
+
+    return listaNova;
+  }
+
   clicaProduto(produto) {
     const id = +produto.productID;
 
@@ -88,6 +123,20 @@ export class AppComponent {
     this.productCode = null;
     this.productName = null;
     this.listPrice = null;
+  }
+
+  adicionaCategoria() {
+
+    this.categoriasApiService.PostCategoria(
+      this.categoryName,
+    ).then(() => {
+      this.listaCategorias();
+    }).catch((error) => {
+      console.log({ error });
+    });
+
+    this.categoryName = null;
+
   }
 
 }
