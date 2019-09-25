@@ -25,7 +25,7 @@ export class AppComponent {
   public detalhesProduto: any;
 
   // Filtro de Preços
-  public minPrice = 0;
+  public minPrice = null;
   public maxPrice = null;
 
   constructor(
@@ -66,8 +66,21 @@ export class AppComponent {
 
   }
 
-  filtrarPreco(lista, minPrice, maxPrice) {
+  setRange(min, max) {
+    this.minPrice = min;
+    this.maxPrice = max;
+  }
+
+  filtrarPreco(lista) {
     const listaNova = [];
+
+    const minPrice = this.minPrice;
+    const maxPrice = this.maxPrice;
+
+    console.log({
+      minPrice,
+      maxPrice
+    });
 
     if (lista != null) {
 
@@ -75,23 +88,32 @@ export class AppComponent {
 
         const listPrice = +produto.listPrice;
 
+        // se tem algum definido
         if ( maxPrice != null || minPrice != null ) {
 
-          if (maxPrice != null && listPrice <= maxPrice) {
-            listaNova.push(produto);
-          } else if (minPrice != null && listPrice >= minPrice) {
-            listaNova.push(produto);
-          } else {
+          // se tem um intervalo fechado
+          if ( maxPrice != null && minPrice != null ) {
             if (listPrice >= minPrice && listPrice <= maxPrice) {
+              listaNova.push(produto);
+            }
+          } else {
+            if (maxPrice != null && listPrice <= maxPrice) {
+              listaNova.push(produto);
+              continue;
+            } else if (minPrice != null && listPrice >= minPrice) {
               listaNova.push(produto);
             }
           }
 
+        } else {
+          return lista;
         }
 
       }
 
     }
+
+    console.log(listaNova);
 
     return listaNova;
   }

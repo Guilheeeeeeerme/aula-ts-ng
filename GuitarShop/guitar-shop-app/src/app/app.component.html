@@ -19,10 +19,10 @@
         <!-- Faixa de Preços -->
         <h4>Product Catalog by Price:</h4>
         <div class="btn-group">
-          <button class="btn btn-default" (click)="minPrice = 0; maxPrice = 299.99">até 299.99</button>
-          <button class="btn btn-default" (click)="minPrice = 300.00; maxPrice = 599.99">de 300.00 a 599.99</button>
-          <button class="btn btn-default" (click)="minPrice = 600.00; maxPrice = 999.99">de 600.00 a 999.99</button>
-          <button class="btn btn-default" (click)="minPrice = 1000; maxPrice = null">acima de 1,000.00</button>
+          <button class="btn btn-default" (click)="setRange(0, 299.99)">até 299.99</button>
+          <button class="btn btn-default" (click)="setRange(300.00, 599.99)">de 300.00 a 599.99</button>
+          <button class="btn btn-default" (click)="setRange(600.00, 999.99)">de 600.00 a 999.99</button>
+          <button class="btn btn-default" (click)="setRange(1000, null)">acima de 1,000.00</button>
         </div>
   
         <h4>Custom:</h4>
@@ -40,7 +40,7 @@
   
         <ul class='list-group'>
           <li class="list-group-item" (click)="clicaProduto(produto)"
-            *ngFor="let produto of filtrarPreco(meusProdutos, minPrice, maxPrice)">
+            *ngFor="let produto of filtrarPreco(meusProdutos)">
             {{ produto.productName }} - {{ produto.listPrice }} R$
           </li>
         </ul>
