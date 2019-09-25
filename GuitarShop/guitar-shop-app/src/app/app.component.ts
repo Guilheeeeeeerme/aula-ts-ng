@@ -9,71 +9,85 @@ import { CategoriasApiService } from './api/categorias-api.service';
 })
 export class AppComponent {
 
+  // Preenchido com o NGMODEL
   public categoryID: number;
   public productCode: string;
   public productName: string;
   public listPrice: number;
-  public nomeDaCategoria: string;
+
+  // vai ter minhas categorias
+  public minhasCategorias: any;
+  public minhaCategoria: any;
+
+  // vai ter meus produtos
+  public meusProdutos: any;
+  public detalhesProduto: any;
 
   constructor(
     private produtosApiService: ProdutosApiService,
     private categoriasApiService: CategoriasApiService,
   ) {
+    this.listaCategorias();
+  }
 
-    this.nomeDaCategoria = 'preencher aquiii';
-
-    /**
-     * API DE PRODUTOS
-     */
-    this.produtosApiService.GetProdutos().then((produtos) => {
-      // todos os produtos vem na variavel 'produtos'
-      console.log({ GetProdutos: produtos });
-    }).catch((error) => {
-      console.log({ error });
-    });
-
-    this.produtosApiService.GetProdutosByCategoria(1).then((produtos) => {
-      // produtos da categoria vem na variavel 'produtos'
-      console.log({ GetProdutosByCategoria: produtos });
-    }).catch((error) => {
-      console.log({ error });
-    });
-
-    this.produtosApiService.GetProdutoById(1).then((produto) => {
-      // produtos do id 'x' vem na variavel 'produtos'
-      console.log({ GetProdutoById: produto });
-    }).catch((error) => {
-      console.log({ error });
-    });
-
-    this.produtosApiService.PostProduto(
-      Math.round(Math.random() * 3),
-      `Produto ${Math.round(Math.random() * 1000)}`,
-      `Code ${Math.round(Math.random() * 1000)}`,
-      Math.round(Math.random() * 1000)
-      ).then((produto) => {
-      // produto do id 'x' vem na variavel 'produto'
-      console.log({ PostProduto: produto });
-    }).catch((error) => {
-      console.log({ error });
-    });
+  listaCategorias() {
 
     /**
      * API DE CATEGORIAS
      */
-    this.categoriasApiService.GetCategorias().then((categorias) => {
-      // todos as categorias vem na variavel 'categorias'
-      console.log({ GetCategorias: categorias });
-    }).catch((error) => {
-      console.log({ error });
-    });
+    this.categoriasApiService.GetCategorias()
+      .then((categorias) => {
+        // guardando no componente as categorias
+        this.minhasCategorias = categorias;
+      }).catch((error) => {
+        console.log({ error });
+      });
+  }
 
-    this.categoriasApiService.GetCategoriaById(1).then((categoria) => {
-      // categoria do id 'x' vem na variavel 'categoria'
-      console.log({ GetCategoriaById: categoria });
-    }).catch((error) => {
-      console.log({ error });
-    });
+  clicaCategoria(categoria) {
+    const id = +categoria.categoryID;
+
+    // MARCA NO FORMULÁRIO QUAL É A CATEGORIA
+    this.minhaCategoria = categoria;
+    this.categoryID = id;
+
+    this.produtosApiService.GetProdutosByCategoria(id)
+      .then((produtos) => {
+        // guardando no componente os produtos da categoria
+        this.meusProdutos = produtos;
+      }).catch((error) => {
+        console.log({ error });
+      });
 
   }
+
+  clicaProduto(produto) {
+    const id = +produto.productID;
+
+    this.produtosApiService.GetProdutoById(id)
+      .then((detalhesProduto) => {
+        // guardando no componente os produtos da categoria
+        this.detalhesProduto = detalhesProduto;
+      }).catch((error) => {
+        console.log({ error });
+      });
+  }
+
+  adiciona() {
+    this.produtosApiService.PostProduto(
+      this.categoryID,
+      this.productCode,
+      this.productName,
+      this.listPrice,
+    ).then(() => {
+      this.clicaCategoria(this.minhaCategoria);
+    }).catch((error) => {
+      console.log({ error });
+    });
+
+    this.productCode = null;
+    this.productName = null;
+    this.listPrice = null;
+  }
+
 }

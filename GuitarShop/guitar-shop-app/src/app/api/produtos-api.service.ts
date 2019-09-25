@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ApiUrl } from '../url';
+
+const host = '127.0.0.1';
+// const host = 'ec2-18-222-134-19.us-east-2.compute.amazonaws.com';
+const port = 8081;
+const ApiUrl = `http://${host}:${port}/api`;
 
 @Injectable({
   providedIn: 'root'
@@ -12,34 +16,22 @@ export class ProdutosApiService {
   constructor(private httpClient: HttpClient) { }
 
   GetProdutos() {
-    return new Promise((resolve, reject) => {
-      this.httpClient.get(`${ApiUrl}/${this.path}`).subscribe(resolve, reject);
-    });
+    return this.httpClient.get(`${ApiUrl}/${this.path}`).toPromise();
   }
 
   GetProdutoById(id: number) {
     const params: any = { id };
-
-    return new Promise((resolve, reject) => {
-      this.httpClient.get(`${ApiUrl}/${this.path}`, { params }).subscribe(resolve, reject);
-    });
+    return this.httpClient.get(`${ApiUrl}/${this.path}`, { params }).toPromise();
   }
 
   GetProdutosByCategoria(categoryId: number) {
     const params: any = { category_id: categoryId };
-
-    return new Promise((resolve, reject) => {
-      this.httpClient.get(`${ApiUrl}/${this.path}`, { params }).subscribe(resolve, reject);
-    });
+    return this.httpClient.get(`${ApiUrl}/${this.path}`, { params }).toPromise();
   }
 
   PostProduto(categoryID: number, productCode: string, productName: string, listPrice: number){
-
     const body: any = { categoryID, productCode, productName, listPrice };
-
-    return new Promise((resolve, reject) => {
-      this.httpClient.post(`${ApiUrl}/${this.path}`, body).subscribe(resolve, reject);
-    });
+    return this.httpClient.post(`${ApiUrl}/${this.path}`, body).toPromise();
   }
 
 }

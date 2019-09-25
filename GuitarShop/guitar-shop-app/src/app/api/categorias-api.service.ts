@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
-import { ApiUrl } from '../url';
 import { HttpClient } from '@angular/common/http';
+
+const host = '127.0.0.1';
+// const host = 'ec2-18-222-134-19.us-east-2.compute.amazonaws.com';
+const port = 8081;
+const ApiUrl = `http://${host}:${port}/api`;
 
 @Injectable({
   providedIn: 'root'
@@ -12,17 +16,17 @@ export class CategoriasApiService {
   constructor(private httpClient: HttpClient) { }
 
   GetCategorias() {
-    return new Promise((resolve, reject) => {
-      this.httpClient.get(`${ApiUrl}/${this.path}`).subscribe(resolve, reject);
-    });
+    return this.httpClient.get(`${ApiUrl}/${this.path}`).toPromise();
+  }
+
+  PostCategoria(categoryName: string){
+    const body: any = { categoryName };
+    return this.httpClient.post(`${ApiUrl}/${this.path}`, body).toPromise();
   }
 
   GetCategoriaById(id: number) {
     const params: any = { id };
-
-    return new Promise((resolve, reject) => {
-      this.httpClient.get(`${ApiUrl}/${this.path}`, { params }).subscribe(resolve, reject);
-    });
+    return this.httpClient.get(`${ApiUrl}/${this.path}`, { params }).toPromise();
   }
 
 }
